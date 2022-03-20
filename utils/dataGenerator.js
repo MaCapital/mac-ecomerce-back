@@ -51,40 +51,51 @@ const fakeItem = [
     {
         name: 'item2',
         unitPrice: 15,
-        subCategoryId: 's-cat-002',
+        subCategoryId: 's-cat-001',
         date: '02/01/22',
         brand: 'brand1',
         description: ' women fashion fashion'
-    }, {
+    }, 
+    {
         name: 'item3',
         unitPrice: 25,
-        subCategoryId: 's-cat-003',
+        subCategoryId: 's-cat-001',
         date: '03/01/22',
         brand: 'brand5',
         description: ' men shoes fashion'
 
-    }, {
+    }, 
+    {
         name: 'item4',
         unitPrice: 25,
-        subCategoryId: 's-cat-004',
+        subCategoryId: 's-cat-002',
         date: '04/01/22',
         brand: 'brand2',
         description: ' women shoes fashion'
 
-    }, {
+    }, 
+    {
         name: 'item5',
         unitPrice: 25,
-        subCategoryId: 's-cat-005',
+        subCategoryId: 's-cat-002',
         date: '05/01/22',
         brand: 'brand2',
         description: ' watches  acc'
 
-    }, {
+    }, 
+    {
         name: 'item6',
         unitPrice: 25,
-        subCategoryId: 's-cat-006',
+        subCategoryId: 's-cat-003',
         date: '06/01/22',
         brand: 'brand3',
         description: ' bags acc'
 
-    }];
+    }
+];
+
+
+//objects export 
+exports.fakeItem = fakeItem;
+exports.fakeSubCategory = fakeSubCategory;
+exports.fakeCategory = fakeCategory;

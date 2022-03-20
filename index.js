@@ -2,24 +2,15 @@ const express = require('express');
 const app = express();
 const port = 8081;
 
+const getItemList = require('./services/listItemService')
+
 
 //items endpoint
 app.get('/items', (req, res) => {
-    let itemsList = [];
     const category = req.query.category;
-    if(category) {
-        res.json({
-            productName: "product",
-            price: 23    
-        })
-    }
-    for (let index = 0; index < 10; index++) {
-        itemsList.push({
-            productName: "product",
-            price: 23    
-        })
-    }
-    res.json(itemsList)
+    const subcategory = req.query.subcategory; 
+    const items = getItemList.getItemList(category, subcategory);
+    res.json(items)
 })
 
 app.get('/search', (req, res) => {
