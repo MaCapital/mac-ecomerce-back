@@ -1,0 +1,23 @@
+{
+  "name": "mac-ecomerce-back",
+  "version": "1.0.0",
+  "description": "ecommerce backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaCapital/mac-ecomerce-back.git"
+  },
+  "author": "MaCapital",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaCapital/mac-ecomerce-back/issues"
+  },
+  "homepage": "https://github.com/MaCapital/mac-ecomerce-back#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
