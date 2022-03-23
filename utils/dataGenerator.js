@@ -6,7 +6,6 @@ const fakeCategory = [{
     categoryId: 'cat-002',
     name: 'Accesories'
 }];
-
 const fakeSubCategory = [{
     subCategoryId: 's-cat-001',
     categoryId: 'cat-001',
@@ -37,7 +36,6 @@ const fakeSubCategory = [{
     categoryId: 'cat-002',
     name: "Bags"
 }];
-
 const fakeItem = [
     {
         name: 'item1',
@@ -55,7 +53,7 @@ const fakeItem = [
         date: '02/01/22',
         brand: 'brand1',
         description: ' women fashion fashion'
-    }, 
+    },
     {
         name: 'item3',
         unitPrice: 25,
@@ -64,7 +62,7 @@ const fakeItem = [
         brand: 'brand5',
         description: ' men shoes fashion'
 
-    }, 
+    },
     {
         name: 'item4',
         unitPrice: 25,
@@ -73,7 +71,7 @@ const fakeItem = [
         brand: 'brand2',
         description: ' women shoes fashion'
 
-    }, 
+    },
     {
         name: 'item5',
         unitPrice: 25,
@@ -82,7 +80,7 @@ const fakeItem = [
         brand: 'brand2',
         description: ' watches  acc'
 
-    }, 
+    },
     {
         name: 'item6',
         unitPrice: 25,
@@ -91,10 +89,16 @@ const fakeItem = [
         brand: 'brand3',
         description: ' bags acc'
 
+    },
+    {
+        name: 'item7',
+        unitPrice: 25,
+        subCategoryId: 's-cat-005',
+        date: '06/01/22',
+        brand: 'brand1',
+        description: ' bags acc'
     }
 ];
-
-
 //objects export 
 exports.fakeItem = fakeItem;
 exports.fakeSubCategory = fakeSubCategory;

@@ -1,30 +1,35 @@
 const dataGenerator = require('../utils/dataGenerator')
-
 //get the item list
-const getItemList = (categoryId, subcategoryId) => {
-    
+const getItemList = (categoryId, subcategoryId, brand, price) => {
+
     let filteredItems = [];
     //ask for all items
     const items = dataGenerator.fakeItem;
     filteredItems = items;
     //ask for subcategories of a specific category
-    
+
     let subcategories = dataGenerator.fakeSubCategory;
 
-    if(categoryId && !subcategoryId) {
+    if (categoryId && !subcategoryId) {
+        filteredItems = [];
         subcategories = filterSubcategoryByCategory(categoryId, dataGenerator.fakeSubCategory);
-        //filter items by all subcategories of a specific categoryId
-        subcategories.forEach(subcatId => {
-            const filteredItemsBySubCat = filterItemBySubcategory(items, subcatId);
+        subcategories.forEach(subcatObj => {
+            const filteredItemsBySubCat = filterItemBySubcategory(items, subcatObj.subCategoryId);
             filteredItemsBySubCat.forEach(item => {
                 filteredItems.push(item);
             });
         });
     }
-
     //filter items by a specific subcategory
-    if(subcategoryId) {
+    if (subcategoryId) {
         filteredItems = filterItemBySubcategory(filteredItems, subcategoryId)
+    }
+    //filter items by a specific brand
+    if (brand) {
+        filteredItems = filterItemsByBrand(filteredItems, brand)
+    }
+    if (price) {
+        filteredItems = filterItemsByPrice(filteredItems, price)
     }
     return filteredItems;
 }
@@ -32,8 +37,8 @@ const getItemList = (categoryId, subcategoryId) => {
 function filterSubcategoryByCategory(category, subCategoryList) {
     let subCategoryFiltered = [];
     subCategoryList.forEach(scObj => {
-        if(scObj.categoryId === category) {
-            subCategoryFiltered.push(scObj);    
+        if (scObj.categoryId === category) {
+            subCategoryFiltered.push(scObj);
         }
     });
     return subCategoryFiltered;
@@ -42,11 +47,33 @@ function filterSubcategoryByCategory(category, subCategoryList) {
 function filterItemBySubcategory(items, subcategory) {
     let filteredItems = [];
     items.forEach(item => {
-        if(item.subCategoryId === subcategory) {
+        if (item.subCategoryId === subcategory) {
             filteredItems.push(item);
         }
     });
+    console.log("item filter s cat : " + JSON.stringify(filteredItems));
     return filteredItems;
+}
+
+
+function filterItemsByBrand(subCategoryItemList, brand) {
+    let filterItemsBrand = [];
+    subCategoryItemList.forEach(item => {
+        if (item.brand == brand) {
+            filterItemsBrand.push(item);
+        }
+    });
+    return filterItemsBrand;
+}
+
+function filterItemsByPrice(subCategoryItemList, price) {
+    let filterItemsPrice = [];
+    subCategoryItemList.forEach(item => {
+        if (item.unitPrice == price) {
+            filterItemsPrice.push(item);
+        }
+    });
+    return filterItemsPrice;
 }
 
 exports.getItemList = getItemList;
