@@ -3,6 +3,13 @@ const app = express();
 const port = 8081;
 const getItemList = require('./services/listItemService')
 
+
+const cors = require("cors");
+
+app.use(cors({
+    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
+}));
+
 //items endpoint
 app.get('/items', (req, res) => {
     const category = req.query.category;

@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/MaCapital/mac-ecomerce-back#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.3",
     "nodemon": "^2.0.15"
   }
