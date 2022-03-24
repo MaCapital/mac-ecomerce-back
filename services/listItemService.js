@@ -41,7 +41,7 @@ const getItemList = (categoryId, subcategoryId, brand, price, response) => {
         }
         response.json(filteredItems);
     })
-    
+
 }
 
 function filterSubcategoryByCategory(category, subCategoryList) {

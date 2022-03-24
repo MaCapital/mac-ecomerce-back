@@ -8,9 +8,11 @@ const db = require('./queries/queries')
 const cors = require("cors");
 
 app.use(cors({
-    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
+    methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
 }));
 
+const getCategoryList = require('./services/listCategorySubCategorySevice.js');
+const getSubCategoryList = require('./services/listCategorySubCategorySevice.js');
 //items endpoint
 app.get('/items', async (req, res) => {
     const category = req.query.category;
@@ -19,13 +21,17 @@ app.get('/items', async (req, res) => {
     const price = req.query.price;
     const items = await getItemList.getItemList(category, subcategory, brand, price, res);
 })
-
-app.get('/search', (req, res) => {
-
-    res.json({
-        productName: "product",
-        price: 23
-    })
+//categories endpoint
+app.get('/categories', (req, res) => {
+    const category = req.query.category;
+    const catSub = getCategoryList.getCategoryList(category);
+    res.json(catSub)
+})
+//subcategories endpoint
+app.get('/subcategories', (req, res) => {
+    const category = req.query.category;
+    const subcategories = getSubCategoryList.getSubCategoryList(category);
+    res.json(subcategories)
 })
 
 //listan the backend in the port 8081
