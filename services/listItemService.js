@@ -1,37 +1,47 @@
-const dataGenerator = require('../utils/dataGenerator')
+const dataGenerator = require('../utils/dataGenerator');
 //get the item list
-const getItemList = (categoryId, subcategoryId, brand, price) => {
+const db = require('../queries/queries');
+const getItemList = (categoryId, subcategoryId, brand, price, response) => {
 
     let filteredItems = [];
     //ask for all items
-    const items = dataGenerator.fakeItem;
-    filteredItems = items;
-    //ask for subcategories of a specific category
+    //const items = dataGenerator.fakeItem;
+    db.pool.query('SELECT * FROM item', (error, results) => {
+        if (error) {
+            throw error
+        }
+        //const items = db.getItems();
+        //console.log(items)
+        const items = results.rows;
+        filteredItems = items;
+        //ask for subcategories of a specific category
 
-    let subcategories = dataGenerator.fakeSubCategory;
+        let subcategories = dataGenerator.fakeSubCategory;
 
-    if (categoryId && !subcategoryId) {
-        filteredItems = [];
-        subcategories = filterSubcategoryByCategory(categoryId, dataGenerator.fakeSubCategory);
-        subcategories.forEach(subcatObj => {
-            const filteredItemsBySubCat = filterItemBySubcategory(items, subcatObj.subCategoryId);
-            filteredItemsBySubCat.forEach(item => {
-                filteredItems.push(item);
+        if (categoryId && !subcategoryId) {
+            filteredItems = [];
+            subcategories = filterSubcategoryByCategory(categoryId, dataGenerator.fakeSubCategory);
+            subcategories.forEach(subcatObj => {
+                const filteredItemsBySubCat = filterItemBySubcategory(items, subcatObj.subCategoryId);
+                filteredItemsBySubCat.forEach(item => {
+                    filteredItems.push(item);
+                });
             });
-        });
-    }
-    //filter items by a specific subcategory
-    if (subcategoryId) {
-        filteredItems = filterItemBySubcategory(filteredItems, subcategoryId)
-    }
-    //filter items by a specific brand
-    if (brand) {
-        filteredItems = filterItemsByBrand(filteredItems, brand)
-    }
-    if (price) {
-        filteredItems = filterItemsByPrice(filteredItems, price)
-    }
-    return filteredItems;
+        }
+        //filter items by a specific subcategory
+        if (subcategoryId) {
+            filteredItems = filterItemBySubcategory(filteredItems, subcategoryId)
+        }
+        //filter items by a specific brand
+        if (brand) {
+            filteredItems = filterItemsByBrand(filteredItems, brand)
+        }
+        if (price) {
+            filteredItems = filterItemsByPrice(filteredItems, price)
+        }
+        response.json(filteredItems);
+    })
+    
 }
 
 function filterSubcategoryByCategory(category, subCategoryList) {
