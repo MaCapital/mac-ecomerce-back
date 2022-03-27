@@ -1,6 +1,30 @@
 const dataGenerator = require('../utils/dataGenerator');
 //get the item list
 const db = require('../queries/queries');
+const { response } = require('express');
+
+//search 
+const getItemListSearch = (ids, response) => {
+    console.log('* ' + ids);
+    let filteredItemsIds = [];
+    let arrayIds = ids.split(",");
+    let srt = ""
+    arrayIds.forEach(element => {
+        srt = srt + "'" + element + "'" + ','
+    });
+    console.log(typeof srt);
+    console.log(srt);
+
+    console.log("Select * from item where itemid in(" + srt + ")");
+    db.pool.query("Select * from item where itemid in(" + srt + "' ')", (error, results) => {
+        if (error) {
+            throw error
+        }
+        filteredItemsIds = results.rows;
+        response.json(filteredItemsIds);
+    });
+}
+
 const getItemList = (categoryId, subcategoryId, brand, price, response) => {
     let filteredItems = [];
     //ask for all items
@@ -57,6 +81,8 @@ const getItemList = (categoryId, subcategoryId, brand, price, response) => {
         }
     })
 }
+
+
 function filterSubcategoryByCategory(category, subCategoryList) {
     let subCategoryFiltered = [];
     subCategoryList.forEach(scObj => {
@@ -98,4 +124,5 @@ function filterItemsByPrice(subCategoryItemList, price) {
     return filterItemsPrice;
 }
 
+exports.getItemListSearch = getItemListSearch;
 exports.getItemList = getItemList;

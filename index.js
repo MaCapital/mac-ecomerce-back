@@ -59,7 +59,12 @@ app.get('/items', async (req, res) => {
     const subcategory = req.query.subcategory;
     const brand = req.query.brand;
     const price = req.query.price;
-    const items = await getItemList.getItemList(category, subcategory, brand, price, res);
+    const ids = req.query.ids;
+    if (ids) {
+        const items = await getItemList.getItemListSearch(ids, res);
+    } else {
+        const items = await getItemList.getItemList(category, subcategory, brand, price, res);
+    }
 })
 
 //categories endpoint +async
