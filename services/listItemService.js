@@ -5,17 +5,12 @@ const { response } = require('express');
 
 //search 
 const getItemListSearch = (ids, response) => {
-    console.log('* ' + ids);
     let filteredItemsIds = [];
     let arrayIds = ids.split(",");
     let srt = ""
     arrayIds.forEach(element => {
         srt = srt + "'" + element + "'" + ','
     });
-    console.log(typeof srt);
-    console.log(srt);
-
-    console.log("Select * from item where itemid in(" + srt + ")");
     db.pool.query("Select * from item where itemid in(" + srt + "' ')", (error, results) => {
         if (error) {
             throw error
@@ -49,7 +44,7 @@ const getItemList = (categoryId, subcategoryId, brand, price, response) => {
                 subcategories = subcategoriesdb;
                 subcategoriesCat = filterSubcategoryByCategory(categoryId, subcategories);
                 subcategoriesCat.forEach(subcatObj => {
-                    const filteredItemsBySubCat = filterItemBySubcategory(items, subcatObj.subCategoryId);
+                    const filteredItemsBySubCat = filterItemBySubcategory(items, subcatObj.subcategoryid);
                     filteredItemsBySubCat.forEach(item => {
                         filteredItems.push(item);
                     });
@@ -86,7 +81,7 @@ const getItemList = (categoryId, subcategoryId, brand, price, response) => {
 function filterSubcategoryByCategory(category, subCategoryList) {
     let subCategoryFiltered = [];
     subCategoryList.forEach(scObj => {
-        if (scObj.categoryId === category) {
+        if (scObj.categoryid === category) {
             subCategoryFiltered.push(scObj);
         }
     });
@@ -96,7 +91,7 @@ function filterSubcategoryByCategory(category, subCategoryList) {
 function filterItemBySubcategory(items, subcategory) {
     let filteredItems = [];
     items.forEach(item => {
-        if (item.subCategoryId === subcategory) {
+        if (item.subcategoryid === subcategory) {
             filteredItems.push(item);
         }
     });
@@ -117,7 +112,7 @@ function filterItemsByBrand(subCategoryItemList, brand) {
 function filterItemsByPrice(subCategoryItemList, price) {
     let filterItemsPrice = [];
     subCategoryItemList.forEach(item => {
-        if (item.unitPrice == price) {
+        if (item.unitprice == price) {
             filterItemsPrice.push(item);
         }
     });

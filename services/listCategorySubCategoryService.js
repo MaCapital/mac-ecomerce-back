@@ -24,7 +24,7 @@ const getSubCategoryList = (categoryId, response) => {
         //const subCategories = dataGenerator.fakeSubCategory;
         const subCategories = results.rows;
         subCategories.forEach(subcategory => {
-            if (subcategory.categoryId === categoryId) {
+            if (subcategory.categoryid === categoryId) {
                 subcategoryList.push(subcategory)
             }
         });
