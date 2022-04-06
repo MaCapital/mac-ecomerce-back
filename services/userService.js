@@ -7,12 +7,13 @@ const isUserPresent = (username, email, response) => {
         if (error) {
             throw error;
         }
-        console.log(result.rows.length)
         if (result.rows.length != 0) {
             console.log("im already present")
+            console.log(result.rows[0].usertype)
             const objResponse = {
                 username: username,
-                email: email
+                email: email,
+                usertype: result.rows[0].usertype
             }
             response.json(objResponse);
         }
@@ -36,7 +37,8 @@ const isUserPresent = (username, email, response) => {
                     }
                     const objResponse = {
                         username: username,
-                        email: email
+                        email: email,
+                        usertype: 1
                     }
                     response.json(objResponse);
                 })
