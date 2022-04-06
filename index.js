@@ -19,6 +19,7 @@ app.use(express.json());
 const users = [];
 
 const cors = require("cors");
+const { isUserPresent, getUser } = require('./services/userService');
 
 //methods
 app.use(cors({
@@ -46,7 +47,8 @@ app.post('/api/google-login', async (req, res) => {
     upsert(users, { name, email, picture });
     res.status(201);
     console.log(name)
-    res.json({ name, email, picture });
+    await isUserPresent(name, email, res)
+    //res.json({ name, email});
 });
 
 
@@ -77,6 +79,12 @@ app.get('/categories', async (req, res) => {
 app.get('/subcategories', async (req, res) => {
     const category = req.query.category;
     const subcategories = await getSubCategoryList.getSubCategoryList(category, res);
+    //res.json(subcategories)
+})
+
+app.get('/user', async (req, res) => {
+    const email = req.query.email;
+    const subcategories = await getUser(email, res);
     //res.json(subcategories)
 })
 
