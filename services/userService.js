@@ -13,7 +13,8 @@ const isUserPresent = (username, email, response) => {
             const objResponse = {
                 username: username,
                 email: email,
-                usertype: result.rows[0].usertype
+                usertype: result.rows[0].usertype,
+                userid: result.rows[0].userid,
             }
             response.json(objResponse);
         }
@@ -38,8 +39,11 @@ const isUserPresent = (username, email, response) => {
                     const objResponse = {
                         username: username,
                         email: email,
-                        usertype: 1
+                        usertype: 1,
+                        userid: userId
                     }
+                    console.log('res')
+                    console.log(JSON.stringify(res));
                     response.json(objResponse);
                 })
 
@@ -54,13 +58,19 @@ const getUser = (email, response) => {
         if (error) {
             throw error
         }
-        //const subCategories = dataGenerator.fakeSubCategory;
         const users = results.rows;
-        users.forEach(user => {
-            if (user.email === email) {
-                userList.push(user)
-            }
-        });
+        if (email) {
+
+            users.forEach(user => {
+                if (user.email === email) {
+                    userList.push(user)
+                }
+            });
+        }
+        else {
+            userList = users;
+        }
+
         response.json(userList);
     });
     //return subcategoryList;

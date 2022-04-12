@@ -18,16 +18,20 @@ const getCategoryList = (response) => {
 const getSubCategoryList = (categoryId, response) => {
     let subcategoryList = [];
     db.pool.query('SELECT * FROM sub_category', (error, results) => {
+
         if (error) {
             throw error
         }
-        //const subCategories = dataGenerator.fakeSubCategory;
         const subCategories = results.rows;
-        subCategories.forEach(subcategory => {
-            if (subcategory.categoryid === categoryId) {
-                subcategoryList.push(subcategory)
-            }
-        });
+        if (!categoryId) {
+            subcategoryList = subCategories;
+        } else {
+            subCategories.forEach(subcategory => {
+                if (subcategory.categoryid === categoryId) {
+                    subcategoryList.push(subcategory)
+                }
+            });
+        }
         response.json(subcategoryList);
     });
     //return subcategoryList;

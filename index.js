@@ -37,8 +37,6 @@ function upsert(array, item) {
 app.post('/api/google-login', async (req, res) => {
     let token = req.body.token;
     console.log(token)
-
-
     const ticket = await client.verifyIdToken({
         idToken: token,
         audience: process.env.CLIENT_ID,
@@ -51,10 +49,7 @@ app.post('/api/google-login', async (req, res) => {
     //res.json({ name, email});
 });
 
-
 //##googleLogin##
-
-
 //items endpoint
 app.get('/items', async (req, res) => {
     const category = req.query.category;
@@ -68,7 +63,6 @@ app.get('/items', async (req, res) => {
         const items = await getItemList.getItemList(category, subcategory, brand, price, res);
     }
 })
-
 //categories endpoint +async
 app.get('/categories', async (req, res) => {
     const category = req.query.category;
@@ -81,12 +75,44 @@ app.get('/subcategories', async (req, res) => {
     const subcategories = await getSubCategoryList.getSubCategoryList(category, res);
     //res.json(subcategories)
 })
-
+//user endpoint
 app.get('/user', async (req, res) => {
     const email = req.query.email;
     const subcategories = await getUser(email, res);
     //res.json(subcategories)
 })
+
+const { createCart, getCart } = require('./services/cartService');
+
+const { createCartDetail, getCartDetail } = require('./services/cartDetailService.js');
+
+//cart endpoint
+app.get('/cart', async (req, res) => {
+    const userid = req.query.userid;
+    const getcart = await getCart(userid, res);
+})
+// create a new cart endpoint
+app.post('/createcart', async (req, res) => {
+    const userid = req.query.userid;
+    await createCart(userid, res);
+})
+//http://localhost:8081/createcd?cartid=2&itemid=pr-0000002&price=20&quantity=2
+app.post('/createcd', async (req, res) => {
+    const cartid = req.query.cartid;
+    const itemid = req.query.itemid;
+    const name = req.query.name;
+    const brand = req.query.brand;
+    const price = req.query.price;
+    const quantity = req.query.quantity;
+
+    await createCartDetail(cartid, itemid, name, brand, price, quantity, res);
+})
+
+app.get('/cartdetail', async (req, res) => {
+    const cartid = req.query.cartid;
+    const getcartdetail = await getCartDetail(cartid, res);
+})
+
 
 //app.get('/testcategory', db.getCategories)
 
@@ -94,4 +120,6 @@ app.get('/user', async (req, res) => {
 app.listen(port, () => {
     console.log('server running on ' + port);
 })
+
+
 
