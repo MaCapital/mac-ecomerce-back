@@ -85,6 +85,7 @@ app.get('/user', async (req, res) => {
 const { createCart, getCart } = require('./services/cartService');
 
 const { createCartDetail, getCartDetail } = require('./services/cartDetailService.js');
+const { saveCheckout, getCheckout } = require('./services/checkoutService');
 
 //cart endpoint
 app.get('/cart', async (req, res) => {
@@ -111,7 +112,24 @@ app.post('/createcd', async (req, res) => {
 app.get('/cartdetail', async (req, res) => {
     const cartid = req.query.cartid;
     const getcartdetail = await getCartDetail(cartid, res);
-})
+});
+
+app.post('/checkout', async (req, res) => {
+    let userid = req.query.userid;
+    let cartid = req.query.cartid;
+    let total = req.query.total;
+    let description = req.query.description;
+    console.log("the checkout request body " + req.body)
+    
+    await saveCheckout(userid, cartid, total, description, res)
+    //res.json({ name, email});
+});
+
+app.get('/checkout', async (req, res) => {
+    const userid = req.query.userid;
+    await getCheckout(userid, res);
+});
+
 
 
 //app.get('/testcategory', db.getCategories)
