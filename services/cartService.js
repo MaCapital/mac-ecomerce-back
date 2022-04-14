@@ -49,5 +49,20 @@ const getCart = (userid, response) => {
     //return subcategoryList;
 }
 
+const deleteCart = (userid, response) => {
+    const userid_ = userid + '';
+    const dbQuery = "DELETE FROM cart WHERE userid= '" + userid_ + "'";
+    db.pool.query(dbQuery, (err, res) => {
+        if (err) {
+            throw err;
+        }
+        const objResponse = {
+            status: 200
+        }
+        response.json(objResponse);
+    })
+
+}
+exports.deleteCart = deleteCart;
 exports.createCart = createCart;
 exports.getCart = getCart;

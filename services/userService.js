@@ -15,6 +15,7 @@ const isUserPresent = (username, email, response) => {
                 email: email,
                 usertype: result.rows[0].usertype,
                 userid: result.rows[0].userid,
+                warehouseid: result.rows[0].warehouseid,
             }
             response.json(objResponse);
         }
@@ -28,7 +29,8 @@ const isUserPresent = (username, email, response) => {
 
                 const userId = results.rows[0].max == null ? 1 : parseInt(results.rows[0].max) + 1
                 console.log("userId " + userId);
-                const values = "('" + userId + "', 1, '-1', '" + email + "', '" + username + "', '-1', 'w-0001')";
+                const warehouseid = 'w-0001';
+                const values = "('" + userId + "', 1, '-1', '" + email + "', '" + username + "', '-1', '" + warehouseid + "')";
                 const columns = "(userid, usertype, deliveryid, email, username, password, warehouseid)"
                 const dbQuery = 'INSERT INTO "user" ' + columns + ' VALUES ' + values;
                 console.log("query to save a user " + dbQuery);
@@ -40,7 +42,8 @@ const isUserPresent = (username, email, response) => {
                         username: username,
                         email: email,
                         usertype: 1,
-                        userid: userId
+                        userid: userId,
+                        warehouseid: warehouseid
                     }
                     console.log('res')
                     console.log(JSON.stringify(res));

@@ -65,5 +65,22 @@ const getCartDetail = (cartid, response) => {
     });
 }
 
+
+const deleteCartDetail = (cartdetailid, response) => {
+    const cartdetailid_ = cartdetailid + '';
+    const dbQuery = "DELETE FROM cart_detail WHERE cartdetailid= '" + cartdetailid_ + "'";
+    db.pool.query(dbQuery, (err, res) => {
+        if (err) {
+            throw err;
+        }
+        const objResponse = {
+            status: 200
+        }
+        response.json(objResponse);
+    })
+
+}
+
+exports.deleteCartDetail = deleteCartDetail;
 exports.createCartDetail = createCartDetail;
 exports.getCartDetail = getCartDetail;

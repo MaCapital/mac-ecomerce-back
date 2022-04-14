@@ -43,7 +43,7 @@ const getCheckout = (userid, res) => {
         const orders = results.rows;
         let filteredOrders = [];
         orders.forEach(order => {
-            if(order.userid == userid) {
+            if (order.userid == userid) {
                 filteredOrders.push(order);
             }
         });

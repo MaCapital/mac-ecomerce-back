@@ -2,13 +2,19 @@ const express = require('express');
 const app = express();
 const port = 8081;
 const getItemList = require('./services/listItemService')
+const addItem = require('./services/listItemService')
+const getItemsByWarehouse = require('./services/listItemService');
+const deleteItem = require('./services/listItemService');
+
 const getCategoryList = require('./services/listCategorySubCategoryService.js');
 const getSubCategoryList = require('./services/listCategorySubCategoryService.js');
 const db = require('./queries/queries')
-
 const dotenv = require('dotenv');
 const path = require('path');
 const { OAuth2Client } = require('google-auth-library');
+const { createCart, getCart } = require('./services/cartService');
+const { saveCheckout, getCheckout } = require('./services/checkoutService');
+const { createCartDetail, getCartDetail, deleteCartDetail } = require('./services/cartDetailService.js');
 
 
 dotenv.config();
@@ -63,6 +69,30 @@ app.get('/items', async (req, res) => {
         const items = await getItemList.getItemList(category, subcategory, brand, price, res);
     }
 })
+
+app.get('/warehouseitem', async (req, res) => {
+    const wid = req.query.wid;
+    const itemsw = await getItemsByWarehouse.getItemsByWarehouse(wid, res);
+})
+
+app.post('/additem', async (req, res) => {
+    const name = req.query.name;
+    const unitprice = req.query.unitprice;
+    const subcategoryid = req.query.subcategoryid;
+    const image = req.query.image;
+    const color = req.query.color;
+    const measure = req.query.measure;
+    const brand = req.query.brand;
+    const about = req.query.about;
+    const warehouse = req.query.warehouse;
+    await addItem.addItem(name, unitprice, subcategoryid, image, color, measure, brand, about, warehouse, res);
+})
+app.delete('/deleteitem', async (req, res) => {
+    const itemid = req.query.itemid;
+    await deleteItem.deleteItem(itemid, res);
+})
+
+
 //categories endpoint +async
 app.get('/categories', async (req, res) => {
     const category = req.query.category;
@@ -82,10 +112,6 @@ app.get('/user', async (req, res) => {
     //res.json(subcategories)
 })
 
-const { createCart, getCart } = require('./services/cartService');
-
-const { createCartDetail, getCartDetail } = require('./services/cartDetailService.js');
-const { saveCheckout, getCheckout } = require('./services/checkoutService');
 
 //cart endpoint
 app.get('/cart', async (req, res) => {
@@ -97,6 +123,12 @@ app.post('/createcart', async (req, res) => {
     const userid = req.query.userid;
     await createCart(userid, res);
 })
+app.delete('/deletecart', async (req, res) => {
+    const userid = req.query.userid;
+    await deleteCart(userid, res);
+})
+
+
 //http://localhost:8081/createcd?cartid=2&itemid=pr-0000002&price=20&quantity=2
 app.post('/createcd', async (req, res) => {
     const cartid = req.query.cartid;
@@ -105,8 +137,12 @@ app.post('/createcd', async (req, res) => {
     const brand = req.query.brand;
     const price = req.query.price;
     const quantity = req.query.quantity;
-
     await createCartDetail(cartid, itemid, name, brand, price, quantity, res);
+})
+
+app.delete('/deletecd', async (req, res) => {
+    const cartdetailid = req.query.cartdetailid;
+    await deleteCartDetail(cartdetailid, res);
 })
 
 app.get('/cartdetail', async (req, res) => {
@@ -120,7 +156,7 @@ app.post('/checkout', async (req, res) => {
     let total = req.query.total;
     let description = req.query.description;
     console.log("the checkout request body " + req.body)
-    
+
     await saveCheckout(userid, cartid, total, description, res)
     //res.json({ name, email});
 });
@@ -130,9 +166,6 @@ app.get('/checkout', async (req, res) => {
     await getCheckout(userid, res);
 });
 
-
-
-//app.get('/testcategory', db.getCategories)
 
 //listan the backend in the port 8081
 app.listen(port, () => {
