@@ -205,6 +205,25 @@ const deleteItem = (itemid, response) => {
 
 }
 
+const updateitem = (itemBody, res) => {
+    let today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0! 
+    const yyyy = today.getFullYear();
+    today = dd + '/' + mm + '/' + yyyy;
+    const dbQuery = `UPDATE "item" SET name='${itemBody.name}', unitprice=${itemBody.price}, subcategoryid='${itemBody.subcategory}', date='${today}', image='./images', color='${itemBody.color}', measure='${itemBody.measure}', brand='${itemBody.brand}', about='${itemBody.about}',warehouseid='w-0001' WHERE itemid='${itemBody.itemid}'`
+    db.pool.query(dbQuery, (err, response) => {
+        if (err) {
+            throw err;
+        }
+        objRes={
+            status: "successful"
+        }
+        res.json(objRes)
+    })
+}
+
+exports.updateitem = updateitem;
 exports.deleteItem = deleteItem;
 exports.getRandomItemsBySubcategory = getRandomItemsBySubcategory;
 exports.getItemsByWarehouse = getItemsByWarehouse;

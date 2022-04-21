@@ -11,6 +11,8 @@ const getSubCategoryList = require('./services/listCategorySubCategoryService.js
 const db = require('./queries/queries')
 const dotenv = require('dotenv');
 const path = require('path');
+const fs = require('fs');
+const bodyParser = require('body-parser');
 const { OAuth2Client } = require('google-auth-library');
 const { createCart, getCart } = require('./services/cartService');
 const { saveCheckout, getCheckout } = require('./services/checkoutService');
@@ -20,7 +22,11 @@ const { createComment, getComments } = require('./services/commentsService.js');
 dotenv.config();
 console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID)
 const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
-app.use(express.json());
+//app.use(express.json());
+app.use(bodyParser.json({ limit: '500mb', extended: true }));
+app.use(bodyParser.urlencoded({ limit: "500mb", extended: true, parameterLimit: 1000000 }));
+app.use(bodyParser.text({ limit: '200mb' }));
+
 const users = [];
 const cors = require("cors");
 const { isUserPresent, getUser, updateUser } = require('./services/userService');
@@ -28,6 +34,10 @@ const { isUserPresent, getUser, updateUser } = require('./services/userService')
 app.use(cors({
     methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']
 }));
+
+//app.use(myParser.text({ limit: '200mb' }));
+
+
 app.use(express.static(path.join(__dirname, '/build')));
 //##googleLogin##
 function upsert(array, item) {
@@ -89,6 +99,12 @@ app.delete('/deleteitem', async (req, res) => {
 app.get('/itemrandom', async (req, res) => {
     const subcategoryid = req.query.subcategoryid;
     await getRandomItemsBySubcategory.getRandomItemsBySubcategory(subcategoryid, res);
+
+})
+
+app.post('/updateitem', async (req, res) => {
+    const itemBody = req.body;
+    await getItemList.updateitem(itemBody, res);
 })
 
 
@@ -184,11 +200,60 @@ app.get('/checkout', async (req, res) => {
     await getCheckout(userid, res);
 });
 
+app.post('/saveimage', (req, res) => {
+    console.log("body", req.body)
+    const image64 = req.body.image64;
+    const name = req.body.name;
+    objResponse = {
+        status: "successfull"
+    }
+    fs.writeFile('./images/' + name + '.txt', image64, (err) => {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+        res.json(objResponse)
+    })
+});
+
+app.get('/getimage', async (req, res) => {
+    const name = req.query.name;
+    console.log("before")
+    if (fs.existsSync('./images/' + name + '.txt')) {
+        // Do something
+
+        fs.readFile('./images/' + name + '.txt', 'utf8', (err, data) => {
+            if (err) {
+                console.log("here i am")
+                const objResponse = {
+                    image: ""
+                }
+                //console.error(err)
+                res.json(objResponse)
+            }
+            const objResponse = {
+                image: data
+            }
+            //console.log("my image is " + data)
+            res.json(objResponse)
+        })
+    }
+    else {
+        const objResponse = {
+            image: ""
+        }
+        //console.log("my image is " + data)
+        res.json(objResponse)
+    }
+
+
+
+
+});
+
 
 //listan the backend in the port 8081
 app.listen(port, () => {
     console.log('server running on ' + port);
 })
-
-
 
