@@ -3,11 +3,13 @@ const db = require('../queries/queries');
 
 const createCart = (userid, response) => {
     console.log("this is my user bitch " + userid)
-    db.pool.query('SELECT max(cartid) FROM "cart"', (error, results) => {
+    //SELECT (MAX(CAST(cartid AS DECIMAL(38,0)))  + 1)  FROM cart 
+    db.pool.query('SELECT (MAX(CAST(cartid AS DECIMAL(38,0))) )  FROM cart ', (error, results) => {
         if (error) {
             throw error
         }
         console.log("bro")
+        console.log(results)
         console.log(results)
 
         const cartId = results.rows[0].max == null ? 1 : parseInt(results.rows[0].max) + 1
@@ -19,7 +21,7 @@ const createCart = (userid, response) => {
         db.pool.query(dbQuery, (err, res) => {
             if (err) {
                 throw err;
-            } 12
+            }
             const objResponse = {
                 status: 200,
                 cartid: cartId,
@@ -46,7 +48,7 @@ const getCart = (userid, response) => {
         //response.json(cartList);
         response.json(carts);
     });
-    //return subcategoryList;
+
 }
 
 const deleteCart = (userid, response) => {

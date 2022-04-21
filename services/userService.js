@@ -20,6 +20,7 @@ const isUserPresent = (username, email, response) => {
             response.json(objResponse);
         }
         else {
+            //SELECT   (MAX(CAST(userid AS DECIMAL(38,0)))  +1)  FROM "user" to get the max value +1, you can delete '+1' from query
             db.pool.query('SELECT max(userid) FROM "user"', (error, results) => {
                 if (error) {
                     throw error
@@ -79,5 +80,34 @@ const getUser = (email, response) => {
     //return subcategoryList;
 }
 
+const deleteUser = (userid, response) => {
+    const userid_ = userid + '';
+    const dbQuery = 'DELETE FROM "user" WHERE userid= ' + "'" + userid_ + "'";
+    db.pool.query(dbQuery, (err, res) => {
+        if (err) {
+            throw err;
+        }
+        const objResponse = {
+            status: 200
+        }
+        response.json(objResponse);
+    })
+}
+
+const updateUser = (useremail, usertype, response) => {
+    //UPDATE "user" SET usertype=2 WHERE email='eseller00001@gmail.com'
+    const dbQuery = 'UPDATE "user" SET usertype=' + "'" + usertype + "' WHERE email= '" + useremail + "'";
+    db.pool.query(dbQuery, (err, res) => {
+        if (err) {
+            throw err;
+        }
+        const objResponse = {
+            status: 200
+        }
+        response.json(objResponse);
+    })
+}
+exports.updateUser = updateUser;
+exports.deleteUser = deleteUser;
 exports.isUserPresent = isUserPresent;
 exports.getUser = getUser;

@@ -1,7 +1,6 @@
-const dataGenerator = require('../utils/dataGenerator');
 //get the item list
 const db = require('../queries/queries');
-const { response } = require('express');
+
 
 //search 
 const getItemListSearch = (ids, response) => {
@@ -178,6 +177,17 @@ const getItemsByWarehouse = (warehouseid, response) => {
     })
 
 }
+const getRandomItemsBySubcategory = (subcategoryid, response) => {
+    const subcategoryId = subcategoryid + '';
+    const dbQuery = "SELECT * from item where subcategoryid='" + subcategoryId + "' order by random() limit 4";
+    db.pool.query(dbQuery, (err, results) => {
+        if (err) {
+            throw err;
+        }
+        const RandomItems = results.rows;
+        response.json(RandomItems);
+    })
+}
 
 
 const deleteItem = (itemid, response) => {
@@ -196,6 +206,7 @@ const deleteItem = (itemid, response) => {
 }
 
 exports.deleteItem = deleteItem;
+exports.getRandomItemsBySubcategory = getRandomItemsBySubcategory;
 exports.getItemsByWarehouse = getItemsByWarehouse;
 exports.addItem = addItem;
 exports.getItemListSearch = getItemListSearch;
